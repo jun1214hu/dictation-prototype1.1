@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name"> Dictation Prototype 1</string>
+    <string name ="hint" > Touch to Record </string>
+</resources>
