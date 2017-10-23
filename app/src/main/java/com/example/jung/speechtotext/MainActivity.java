@@ -1,23 +1,31 @@
 package com.example.jung.speechtotext;
 
+import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 
+
+import java.lang.Object;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQ_CODE_SPEECH_INPUT = 100;
-    private TextView mVoiceInputTv;
+    private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
+
 
 
 
@@ -26,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mVoiceInputTv = (TextView) findViewById(R.id.voiceInput);
+        mVoiceInputTv = (EditText) findViewById(R.id.voiceInput);
         mSpeakBtn = (ImageButton) findViewById(R.id.btnSpeak);
         mSpeakBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -59,10 +67,52 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.setText(result.get(0));
+                    writeToFile(result.get(0));
+
                 }
                 break;
             }
 
+        }
+    }
+
+
+    public void writeToFile(String dataToWrite)
+    {
+        // Get the directory for the user's public pictures directory.
+        final File path =
+                Environment.getExternalStoragePublicDirectory
+                        (
+                                //Environment.DIRECTORY_PICTURES
+                                Environment.DIRECTORY_DOCUMENTS + "dictation.txt"
+                        );
+
+        // Make sure the path directory exists.
+        if(!path.exists())
+        {
+            // Make it, if it doesn't exit
+            path.mkdirs();
+        }
+
+        final File file = new File(path, "DictationPrototype.txt");
+
+        // Save your stream, don't forget to flush() it before closing it.
+
+        try
+        {
+            file.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(file);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(dataToWrite);
+
+            myOutWriter.close();
+
+            fOut.flush();
+            fOut.close();
+        }
+        catch (IOException e)
+        {
+            Log.e("Exception", "File write failed: " + e.toString());
         }
     }
 }
