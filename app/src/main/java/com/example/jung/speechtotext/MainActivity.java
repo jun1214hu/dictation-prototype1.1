@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
+    private Button mBtnSave;
 
 
 
@@ -43,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 startVoiceInput();
             }
         });
+
+/*
+        mBtnSave.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick (View x){
+                writeToFile();
+
+            }
+        });
+*/
+
+
 
     }
 
@@ -84,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 Environment.getExternalStoragePublicDirectory
                         (
                                 //Environment.DIRECTORY_PICTURES
-                                Environment.DIRECTORY_DOCUMENTS + "dictation.txt"
+                                Environment.DIRECTORY_DOWNLOADS + "dictation.txt"
                         );
 
         // Make sure the path directory exists.
