@@ -2,7 +2,9 @@ package com.example.jung.speechtotext;
 
 import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,14 +23,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static android.os.Environment.*;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
     private Button mBtnSave;
-
-
 
 
     @Override
@@ -44,22 +46,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startVoiceInput();
             }
-        });
 
-/*
-        mBtnSave.setOnClickListener(new View.OnClickListener()
-        {
+        });
+        mBtnSave = (Button) findViewById(R.id.btnSave);
+        mBtnSave.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick (View x){
-                writeToFile();
-
+            public void onClick(View x) {
+                mVoiceInputTv.setText("");
             }
         });
-*/
-
-
-
     }
 
     private void startVoiceInput() {
@@ -82,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    mVoiceInputTv.setText(result.get(0));
-                    writeToFile(result.get(0));
+                    mVoiceInputTv.append(result.get(0));
 
                 }
                 break;
@@ -91,44 +86,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-
-    public void writeToFile(String dataToWrite)
-    {
-        // Get the directory for the user's public pictures directory.
-        final File path =
-                Environment.getExternalStoragePublicDirectory
-                        (
-                                //Environment.DIRECTORY_PICTURES
-                                Environment.DIRECTORY_DOWNLOADS + "dictation.txt"
-                        );
-
-        // Make sure the path directory exists.
-        if(!path.exists())
-        {
-            // Make it, if it doesn't exit
-            path.mkdirs();
-        }
-
-        final File file = new File(path, "DictationPrototype.txt");
-
-        // Save your stream, don't forget to flush() it before closing it.
-
-        try
-        {
-            file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(dataToWrite);
-
-            myOutWriter.close();
-
-            fOut.flush();
-            fOut.close();
-        }
-        catch (IOException e)
-        {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 }
+
+
+
+
+
+
+
+
+
