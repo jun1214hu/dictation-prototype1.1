@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name"> Dictation Prototype 1</string>
-    <string name ="hint" > Touch to Record </string>
+    <string name="hint"> Touch to Record </string>
+    <string name="title_activity_login">Patient Record</string>
+
+    <!-- Strings related to mainActivity -->
+    <string name="textView2">Patient ID</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_lastname">Last Name</string>
+    <string name="prompt_birthdate">Birthdate</string>
+    <string name="action_access">Access</string>
+    <string name="error_invalid_lastname">This last name is invalid</string>
+    <string name="error_invalid_birthdate">This birthdate is invalid</string>
+    <string name="error_field_required">This field is required</string>
+
 </resources>

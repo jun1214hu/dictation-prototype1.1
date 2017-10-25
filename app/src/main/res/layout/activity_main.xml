@@ -46,6 +46,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView2" />
+
         <ImageButton
             android:id="@+id/btnSpeak"
             style="@android:style/Widget.DeviceDefault.ImageButton"
@@ -68,10 +74,14 @@
 
     <Button
         android:id="@+id/btnSave"
-        android:layout_width="132dp"
+        android:layout_width="65dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnSpeakContainer"
-        android:layout_marginTop="13dp"
-        android:text="Save" />
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:text="Save"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="29dp" />
 
 </RelativeLayout>

@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
+import android.widget.TextView;
 
 
 import java.lang.Object;
@@ -31,12 +31,20 @@ public class MainActivity extends AppCompatActivity {
     private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
     private Button mBtnSave;
+    private TextView mIdentifier;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+        mIdentifier = (TextView) findViewById(R.id.textView2);
+        mIdentifier.setText("Patient: ");
+        mIdentifier.append(message);
+
 
         mVoiceInputTv = (EditText) findViewById(R.id.voiceInput);
         mSpeakBtn = (ImageButton) findViewById(R.id.btnSpeak);
