@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,10 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                String message = mLastnameView.getText().toString() + mBirthdateView.getText().toString();
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);
+
 
 
             }
@@ -104,14 +107,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    /* Called when user clicks the Send button*/
-//    public void sendMessage(View view) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.lastname);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE,message);
-//        startActivity(intent);
-    //}
+    /* Checks if external storage is available for read and write */
+
+
 ///*
 //    private void populateAutoComplete() {
 //        if (!mayRequestContacts()) {
@@ -206,6 +204,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(lastname, birthdate);
             mAuthTask.execute((Void) null);
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            String message = mLastnameView.getText().toString() + mBirthdateView.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+
+
         }
     }
 

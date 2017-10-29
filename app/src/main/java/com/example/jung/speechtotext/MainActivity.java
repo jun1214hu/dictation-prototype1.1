@@ -1,16 +1,11 @@
 package com.example.jung.speechtotext;
 
-import android.annotation.TargetApi;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,12 +13,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
-import java.lang.Object;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
-
-import static android.os.Environment.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mSpeakBtn;
     private Button mBtnSave;
     private TextView mIdentifier;
+    private TextView mSave;
+    private List<String> completeOutput;
+    private String output;
+
+    private File file;
+    private static final String FILENAME = "jsondata";
 
 
     @Override
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mIdentifier = (TextView) findViewById(R.id.textView2);
         mIdentifier.setText("Patient: ");
         mIdentifier.append(message);
+        mSave = (TextView) findViewById(R.id.textView3);
 
 
         mVoiceInputTv = (EditText) findViewById(R.id.voiceInput);
@@ -60,10 +66,49 @@ public class MainActivity extends AppCompatActivity {
         mBtnSave.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View x) {
-                mVoiceInputTv.setText("");
+            public void onClick(View v) {
+                try {
+                    createFile(v);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        File extDir = getExternalFilesDir(null);
+        String path = extDir.getAbsolutePath();
+        mSave.setText(path);
+
+        file = new File(extDir, FILENAME);
+
+    }
+
+    public void createFile(View v) throws IOException, JSONException {
+
+        if (!isExternalStorageWritable() || !isExternalStorageReadable())
+        {
+            mSave.setText("Error");
+            return;
+        }
+        mSave.setText("Saved");
+        JSONArray data = new JSONArray();
+        JSONObject transcript;
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+
+        transcript = new JSONObject();
+        transcript.put("patient ID", message);
+        transcript.put("Transcript", output);
+        data.put(transcript);
+
+        String text = data.toString();
+
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(text.getBytes());
+        fos.close();
     }
 
     private void startVoiceInput() {
@@ -87,12 +132,31 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.append(result.get(0));
+                    output = result.get(0);
 
                 }
                 break;
             }
 
         }
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
 
