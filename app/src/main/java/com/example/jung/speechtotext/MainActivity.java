@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         }
         mSave.setText("Saved");
 
+        output = mVoiceInputTv.getText().toString();
+
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
 
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         jsonObj.put("patient ID", message);
-        jsonObj.put("Transcript", completeOutput);
+        jsonObj.put("Transcript", output);
         jsonObj.put("Date and Time", dateandtime);
 
         jsonArray.put(jsonObj);
@@ -147,8 +149,9 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.append(result.get(0));
-                    output = result.get(0);
-                    completeOutput.add(output);
+
+//                    output = result.get(0);
+//                    completeOutput.add(output);
 
                 }
                 break;
