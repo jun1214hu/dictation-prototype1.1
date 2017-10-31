@@ -1,10 +1,14 @@
 package com.example.jung.speechtotext;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +22,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQ_CODE_SPEECH_INPUT = 100;
@@ -32,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnSave;
     private TextView mIdentifier;
     private TextView mSave;
-    private List<String> completeOutput;
+    private ArrayList<String> completeOutput = new ArrayList<>(100);
+
     private String output;
 
     private File file;
-    private static final String FILENAME = "jsondata";
+    private static final String FILENAME = "Record Transcript";
 
+    Date dateandtime = Calendar.getInstance().getTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         file = new File(extDir, FILENAME);
 
+
     }
 
     public void createFile(View v) throws IOException, JSONException {
@@ -93,21 +105,24 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         mSave.setText("Saved");
-        JSONArray data = new JSONArray();
-        JSONObject transcript;
+
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObj = new JSONObject();
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
-        transcript = new JSONObject();
-        transcript.put("patient ID", message);
-        transcript.put("Transcript", output);
-        data.put(transcript);
 
-        String text = data.toString();
+        jsonObj.put("patient ID", message);
+        jsonObj.put("Transcript", completeOutput);
+        jsonObj.put("Date and Time", dateandtime);
+
+        jsonArray.put(jsonObj);
+
+        String jsonArraytext = jsonArray.toString();
 
         FileOutputStream fos = new FileOutputStream(file);
-        fos.write(text.getBytes());
+        fos.write(jsonArraytext.getBytes());
         fos.close();
     }
 
@@ -133,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.append(result.get(0));
                     output = result.get(0);
+                    completeOutput.add(output);
 
                 }
                 break;
