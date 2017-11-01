@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -41,14 +42,12 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnSave;
     private TextView mIdentifier;
     private TextView mSave;
+    private FloatingActionButton mBack;
     private ArrayList<String> completeOutput = new ArrayList<>(100);
 
     private String output;
 
     private File file;
-    private static final String FILENAME = "Record Transcript";
-
-    Date dateandtime = Calendar.getInstance().getTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,26 @@ public class MainActivity extends AppCompatActivity {
         mIdentifier.setText("Patient: ");
         mIdentifier.append(message);
         mSave = (TextView) findViewById(R.id.textView3);
+
+        mBack = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                try {
+                    createFile(v);
+                    setContentView(R.layout.activity_login);
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
 
 
         mVoiceInputTv = (EditText) findViewById(R.id.voiceInput);
@@ -89,8 +108,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         File extDir = getExternalFilesDir(null);
-        String path = extDir.getAbsolutePath();
-        mSave.setText(path);
+//        String path = extDir.getAbsolutePath();
+        mSave.setText("");
+
+        String FILENAME = message;
 
         file = new File(extDir, FILENAME);
 
@@ -104,7 +125,11 @@ public class MainActivity extends AppCompatActivity {
             mSave.setText("Error");
             return;
         }
-        mSave.setText("Saved");
+
+        Date dateandtime = Calendar.getInstance().getTime();
+        String datetime = dateandtime.toString();
+        mSave.setText("Saved ");
+        mSave.append(datetime);
 
         output = mVoiceInputTv.getText().toString();
 
@@ -128,6 +153,13 @@ public class MainActivity extends AppCompatActivity {
         fos.close();
     }
 
+    public void onBackPressed() {
+        setContentView(R.layout.activity_login);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+
     private void startVoiceInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -149,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.append(result.get(0));
+                    mVoiceInputTv.append(", ");
 
 //                    output = result.get(0);
 //                    completeOutput.add(output);
