@@ -39,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
+    private Button mBtnClear;
     private Button mBtnSave;
     private TextView mIdentifier;
     private TextView mSave;
     private FloatingActionButton mBack;
-    private ArrayList<String> completeOutput = new ArrayList<>(100);
 
+    private String outputCurrent;
     private String output;
 
     private File file;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         mVoiceInputTv = (EditText) findViewById(R.id.voiceInput);
         mSpeakBtn = (ImageButton) findViewById(R.id.btnSpeak);
         mSpeakBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +107,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mBtnClear = (Button) findViewById(R.id.btnClear);
+        mBtnClear.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    clearText(v);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
+
+
         File extDir = getExternalFilesDir(null);
 //        String path = extDir.getAbsolutePath();
         mSave.setText("");
@@ -116,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         file = new File(extDir, FILENAME);
 
 
+    }
+
+    public void clearText(View v) throws IOException, JSONException {
+        createFile(v);
+        mVoiceInputTv.setText("");
     }
 
     public void createFile(View v) throws IOException, JSONException {
@@ -154,16 +177,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        setContentView(R.layout.activity_login);
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
 
     private void startVoiceInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-MX");
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Recording...");
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
@@ -181,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     mVoiceInputTv.append(result.get(0));
-                    mVoiceInputTv.append(", ");
+                    mVoiceInputTv.append(" , ");
 
-//                    output = result.get(0);
+                    outputCurrent = result.get(0);
 //                    completeOutput.add(output);
 
                 }

@@ -13,5 +13,9 @@
     <string name="error_invalid_lastname">This last name is invalid</string>
     <string name="error_invalid_birthdate">This birthdate is invalid</string>
     <string name="error_field_required">This field is required</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
 
 </resources>
