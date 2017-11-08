@@ -12,9 +12,12 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -34,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private EditText mVoiceInputTv;
@@ -48,12 +51,18 @@ public class MainActivity extends AppCompatActivity {
     private String outputCurrent;
     private String output;
 
+    private Spinner languageSpinner;
+    private static final String[]paths = {"English", "Spanish", "Hindi", "Arabic"};
+    private String language;
+
+
     private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
@@ -124,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        languageSpinner = (Spinner) findViewById(R.id.languageSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.language_arrays, android.R.layout.simple_spinner_item);
+        languageSpinner.setAdapter(adapter);
+        languageSpinner.setOnItemSelectedListener(this);
+
 
         File extDir = getExternalFilesDir(null);
 //        String path = extDir.getAbsolutePath();
@@ -134,6 +148,30 @@ public class MainActivity extends AppCompatActivity {
         file = new File(extDir, FILENAME);
 
 
+    }
+
+
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+        switch (position) {
+            case 0:
+                language = "en-US";
+                break;
+            case 1:
+                language = "es-MX";
+                break;
+            case 2:
+                language = "hi-IN";
+                break;
+            case 3:
+                language = "ar-EG";
+                break;
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        language = Locale.getDefault().toString();
     }
 
     public void clearText(View v) throws IOException, JSONException {
@@ -186,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
     private void startVoiceInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-MX");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Recording...");
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);

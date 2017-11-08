@@ -129,11 +129,33 @@
         android:layout_alignBottom="@+id/btnSave"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
         android:fontFamily="sans-serif"
         android:onClick="createFile"
         android:text="Undo"
         android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/languageSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/scrollView3"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignTop="@+id/textView3"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:entries="@array/language_arrays"
+        android:minHeight="20dp"
+        android:minWidth="20dp"
+        android:padding="10dp"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:prompt="@string/language_prompt" />
 
 </RelativeLayout>

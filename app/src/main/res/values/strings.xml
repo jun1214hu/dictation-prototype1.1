@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name"> Dictation Prototype 1</string>
-    <string name="hint"> Touch to Record </string>
+    <string name="hint"> Tap to Record </string>
     <string name="title_activity_login">Patient Record</string>
 
     <!-- Strings related to mainActivity -->
@@ -15,7 +15,15 @@
     <string name="error_field_required">This field is required</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
+    <!-- Strings related to Spinner -->
+    <string name="language_prompt">Language</string>
+
+    <string-array name="language_arrays">
+        <item>English</item>
+        <item>Español</item>
+        <item>हिंदी</item>
+        <item>العربية</item>
+    </string-array>
 
 
 </resources>

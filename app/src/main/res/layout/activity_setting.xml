@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jung.speechtotext.SettingActivity">
+
+    <RadioButton
+        android:id="@+id/SpanishBtn"
+        android:layout_width="268dp"
+        android:layout_height="49dp"
+        android:text="Español "
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="101dp" />
+
+    <RadioButton
+        android:id="@+id/HindiBtn"
+        android:layout_width="268dp"
+        android:layout_height="49dp"
+        android:text="हिंदी "
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="150dp" />
+
+    <RadioButton
+        android:id="@+id/ArabicBtn"
+        android:layout_width="76dp"
+        android:layout_height="53dp"
+        android:fontFamily="sans-serif"
+        android:text="العربية"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="199dp"
+        tools:text="العربية" />
+
+    <RadioButton
+        android:id="@+id/EnglishBtn"
+        android:layout_width="268dp"
+        android:layout_height="49dp"
+        android:checked="true"
+        android:text="English"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="52dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="369dp"
+        android:layout_height="40dp"
+        android:text="Language"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+</android.support.constraint.ConstraintLayout>
