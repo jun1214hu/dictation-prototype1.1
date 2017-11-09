@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">  إملاء</string>
+    <string name="action_access">التمكن من</string>
+    <string name="error_field_required">هذه الخانة مطلوبه</string>
+    <string name="error_invalid_birthdate">تاريخ الميلاد هذا غير صالح</string>
+    <string name="error_invalid_lastname">هذا الاسم الأخير غير صالح</string>
+    <string name="hint">  انقر لتسجيل</string>
+    <string name="language_prompt">لغة</string>
+    <string name="prompt_birthdate">تاريخ الميلاد</string>
+    <string name="prompt_lastname">الكنية</string>
+    <string name="textView2">معرف المريض</string>
+    <string name="title_activity_login">سجل المريض</string>
+    <string name="title_activity_settings">إعدادات</string>
+    <string name="save">حفظ</string>
+    <string name="textView3">حفظ</string>
+    <string name="saveTimePrompt">حفظ:</string>
+</resources>

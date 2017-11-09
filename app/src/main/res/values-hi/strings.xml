@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">इमला</string>
+    <string name="action_access">पहुंच</string>
+    <string name="error_field_required">यह फ़ील्ड आवश्यक है</string>
+    <string name="error_invalid_birthdate">यह जन्मतिथि अमान्य है</string>
+    <string name="error_invalid_lastname">यह अंतिम नाम अमान्य है</string>
+    <string name="hint">  रिकॉर्ड करने के लिए टैप करें</string>
+    <string name="language_prompt">भाषा</string>
+    <string name="prompt_birthdate">जन्म दिन</string>
+    <string name="prompt_lastname">अंतिम नाम</string>
+    <string name="textView2">रोगी आईडी</string>
+    <string name="title_activity_login">रोगी का रिकॉर्ड</string>
+    <string name="title_activity_settings">सेटिंग्स</string>
+    <string name="save">सहेजें</string>
+    <string name="textView3">सहेजें</string>
+    <string name="saveTimePrompt">सहेजें:</string>
+</resources>

@@ -4,7 +4,12 @@
     <string name="title_activity_login">Patient Record</string>
 
     <!-- Strings related to mainActivity -->
-    <string name="textView2">Patient ID</string>
+    <string name="textView2">Patient :</string>
+    <string name="saveTime"> </string>
+    <string name="saveTimePrompt">Last Saved:</string>
+    <string name="undo">Undo</string>
+    <string name="save">Save</string>
+
 
     <!-- Strings related to login -->
     <string name="prompt_lastname">Last Name</string>
@@ -19,11 +24,13 @@
     <string name="language_prompt">Language</string>
 
     <string-array name="language_arrays">
+        <item>     +     </item>
         <item>English</item>
         <item>Español</item>
         <item>हिंदी</item>
         <item>العربية</item>
     </string-array>
+    <string name="textView3"></string>
 
 
 </resources>

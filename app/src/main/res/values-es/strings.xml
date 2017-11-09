@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dictado</string>
+    <string name="action_access">Acceso</string>
+    <string name="error_field_required">este campo es requerido</string>
+    <string name="error_invalid_birthdate">Esta fecha de nacimiento no es válida</string>
+    <string name="error_invalid_lastname">Este apellido no es válido</string>
+    <string name="hint">  Toca para grabar</string>
+    <string name="language_prompt">Idioma</string>
+    <string name="prompt_birthdate">Fecha de nacimiento</string>
+    <string name="prompt_lastname">Apellido</string>
+    <string name="textView2">"Paciente: "</string>
+    <string name="title_activity_login">Historia clínica del paciente</string>
+    <string name="title_activity_settings">Configuraciones</string>
+    <string name="save">guardar</string>
+    <string name="textView3">Guardado</string>
+    <string name="saveTimePrompt">Guardar:</string>
+</resources>

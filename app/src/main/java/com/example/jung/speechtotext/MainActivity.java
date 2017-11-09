@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String output;
 
     private Spinner languageSpinner;
-    private static final String[]paths = {"English", "Spanish", "Hindi", "Arabic"};
+
     private String language;
 
 
@@ -63,11 +65,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
         mIdentifier = (TextView) findViewById(R.id.textView2);
-        mIdentifier.setText("Patient: ");
         mIdentifier.append(message);
         mSave = (TextView) findViewById(R.id.textView3);
 
@@ -141,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         File extDir = getExternalFilesDir(null);
 //        String path = extDir.getAbsolutePath();
-        mSave.setText("");
 
         String FILENAME = message;
 
@@ -150,19 +149,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         switch (position) {
             case 0:
-                language = "en-US";
+                language = Locale.getDefault().toString();
                 break;
             case 1:
-                language = "es-MX";
+                language = "en-US";
                 break;
             case 2:
-                language = "hi-IN";
+                language = "es-MX";
                 break;
             case 3:
+                language = "hi-IN";
+                break;
+            case 4:
                 language = "ar-EG";
                 break;
 
@@ -187,10 +188,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
-        Date dateandtime = Calendar.getInstance().getTime();
-        String datetime = dateandtime.toString();
-        mSave.setText("Saved ");
-        mSave.append(datetime);
+        String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        mSave.setText(time);
 
         output = mVoiceInputTv.getText().toString();
 
@@ -203,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         jsonObj.put("patient ID", message);
         jsonObj.put("Transcript", output);
-        jsonObj.put("Date and Time", dateandtime);
+        jsonObj.put("Time", time);
+        jsonObj.put("Date", date);
 
         jsonArray.put(jsonObj);
 
