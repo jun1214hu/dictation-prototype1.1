@@ -9,10 +9,10 @@
     <string name="language_prompt">भाषा</string>
     <string name="prompt_birthdate">जन्म दिन</string>
     <string name="prompt_lastname">अंतिम नाम</string>
-    <string name="textView2">रोगी आईडी</string>
+    <string name="textView2">\"रोगी आईडी: \"</string>
     <string name="title_activity_login">रोगी का रिकॉर्ड</string>
     <string name="title_activity_settings">सेटिंग्स</string>
     <string name="save">सहेजें</string>
     <string name="textView3">सहेजें</string>
-    <string name="saveTimePrompt">सहेजें:</string>
+    <string name="saveTimePrompt">"सहेजें: "</string>
 </resources>

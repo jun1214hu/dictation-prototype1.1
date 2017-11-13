@@ -4,9 +4,9 @@
     <string name="title_activity_login">Patient Record</string>
 
     <!-- Strings related to mainActivity -->
-    <string name="textView2">Patient :</string>
+    <string name="textView2">"Patient: "</string>
     <string name="saveTime"> </string>
-    <string name="saveTimePrompt">Last Saved:</string>
+    <string name="saveTimePrompt">"Last Saved: "</string>
     <string name="undo">Undo</string>
     <string name="save">Save</string>
 

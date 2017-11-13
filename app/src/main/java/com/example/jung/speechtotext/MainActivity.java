@@ -57,8 +57,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private String language;
 
+    private String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
+    private String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
 
     private File file;
+    private String patientFile;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +144,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         languageSpinner.setOnItemSelectedListener(this);
 
 
-        File extDir = getExternalFilesDir(null);
-//        String path = extDir.getAbsolutePath();
 
-        String FILENAME = message;
 
-        file = new File(extDir, FILENAME);
+
 
 
     }
@@ -176,9 +178,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void clearText(View v) throws IOException, JSONException {
+        counter++;
         createFile(v);
         mVoiceInputTv.setText("");
     }
+
 
     public void createFile(View v) throws IOException, JSONException {
 
@@ -188,17 +192,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
-        String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        File extDir = getExternalFilesDir(null);
+//      String path = extDir.getAbsolutePath();
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+
+        patientFile = message + " " + counter;
+        String FILENAME = patientFile;
+
+        file = new File(extDir, FILENAME);
+
         mSave.setText(time);
 
         output = mVoiceInputTv.getText().toString();
 
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
-
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
 
         jsonObj.put("patient ID", message);
