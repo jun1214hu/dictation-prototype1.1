@@ -16,4 +16,5 @@
     <string name="saveTimePrompt">"حفظ: "</string>
     <string name="action_access">إدخل</string>
     <string name="undo">مسح</string>
+    <string name="settings">إعدادات</string>
 </resources>

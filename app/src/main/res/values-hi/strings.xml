@@ -15,4 +15,6 @@
     <string name="save">सहेजें</string>
     <string name="textView3">सहेजें</string>
     <string name="saveTimePrompt">"सहेजें: "</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="undo">मिटाना</string>
 </resources>

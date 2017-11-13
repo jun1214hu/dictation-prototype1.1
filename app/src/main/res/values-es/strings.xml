@@ -15,4 +15,6 @@
     <string name="save">guardar</string>
     <string name="textView3">Guardado</string>
     <string name="saveTimePrompt">"Guardar: "</string>
+    <string name="settings">Configuraciones</string>
+    <string name="undo">Borrar</string>
 </resources>

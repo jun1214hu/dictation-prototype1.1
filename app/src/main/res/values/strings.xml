@@ -5,9 +5,9 @@
 
     <!-- Strings related to mainActivity -->
     <string name="textView2">"Patient: "</string>
-    <string name="saveTime"> </string>
+    <string name="saveTime" translatable="false"> </string>
     <string name="saveTimePrompt">"Last Saved: "</string>
-    <string name="undo">Undo</string>
+    <string name="undo">Clear</string>
     <string name="save">Save</string>
 
 
@@ -24,13 +24,14 @@
     <string name="language_prompt">Language</string>
 
     <string-array name="language_arrays">
-        <item>     +     </item>
+        <item><string name="settings">Settings</string></item>
         <item>English</item>
         <item>Español</item>
         <item>हिंदी</item>
         <item>العربية</item>
     </string-array>
     <string name="textView3"></string>
+    <string name="settings">Settings</string>
 
 
 </resources>
