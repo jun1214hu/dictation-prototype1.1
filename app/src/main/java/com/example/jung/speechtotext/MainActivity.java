@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private EditText mVoiceInputTv;
     private ImageButton mSpeakBtn;
-    private Button mBtnClear;
+    private Button mBtnUndo;
     private Button mBtnSave;
     private TextView mIdentifier;
     private TextView mSave;
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private String outputCurrent;
     private String output;
+    private String undoOutput;
 
     private Spinner languageSpinner;
 
@@ -121,13 +122,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        mBtnClear = (Button) findViewById(R.id.btnClear);
-        mBtnClear.setOnClickListener(new View.OnClickListener(){
+        mBtnUndo = (Button) findViewById(R.id.btnUndo);
+        mBtnUndo.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 try {
-                    clearText(v);
+                    undoText(v);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -135,6 +136,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
 
+        });
+
+        mBtnUndo.setOnLongClickListener(new View.OnLongClickListener(){
+
+            @Override
+            public boolean onLongClick(View v) {
+                clearText(v);
+                return false;
+            }
         });
 
 
@@ -149,6 +159,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
+    }
+
+    private void clearText(View v) {
+        mVoiceInputTv.setText("");
     }
 
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -177,10 +191,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         language = Locale.getDefault().toString();
     }
 
-    public void clearText(View v) throws IOException, JSONException {
-        counter++;
-        createFile(v);
-        mVoiceInputTv.setText("");
+    public void undoText(View v) throws IOException, JSONException {
+        mVoiceInputTv.setText(undoOutput);
     }
 
 
@@ -197,6 +209,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+
+        counter++;
 
         patientFile = message + " " + counter;
         String FILENAME = patientFile;
@@ -223,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(jsonArraytext.getBytes());
         fos.close();
+
+        mVoiceInputTv.setText("");
     }
 
     public void onBackPressed() {
@@ -247,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        undoOutput = mVoiceInputTv.getText().toString();
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {

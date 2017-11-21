@@ -120,7 +120,7 @@
         android:layout_marginStart="20dp" />
 
     <Button
-        android:id="@+id/btnClear"
+        android:id="@+id/btnUndo"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

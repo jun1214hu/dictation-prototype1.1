@@ -64,10 +64,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static final String EXTRA_MESSAGE = "com.example.jung.speechtotext.MESSAGE";
     // UI references.
     private AutoCompleteTextView mLastnameView;
+    private AutoCompleteTextView mPatientIDView;
     private EditText mBirthdateView;
     private View mProgressView;
     private View mLoginFormView;
-
+    private String message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mLastnameView = (AutoCompleteTextView) findViewById(R.id.lastname);
         //populateAutoComplete();
+
+        mPatientIDView = (AutoCompleteTextView) findViewById(R.id.identification);
 
         mBirthdateView = (EditText) findViewById(R.id.birthdate);
         mBirthdateView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -164,27 +167,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset errors.
         mLastnameView.setError(null);
         mBirthdateView.setError(null);
+        mPatientIDView.setError(null);
 
         // Store values at the time of the login attempt.
         String lastname = mLastnameView.getText().toString();
         String birthdate = mBirthdateView.getText().toString();
+        String identification = mPatientIDView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(birthdate) && !isbirthdateValid(birthdate)) {
+        if (TextUtils.isEmpty(birthdate) && TextUtils.isEmpty(identification)) {
+            mBirthdateView.setError(getString(R.string.error_field_required));
+            focusView = mBirthdateView;
+            cancel = true;
+        } else if (!isbirthdateValid(birthdate) && TextUtils.isEmpty(identification)) {
             mBirthdateView.setError(getString(R.string.error_invalid_birthdate));
             focusView = mBirthdateView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(lastname)) {
+        if (TextUtils.isEmpty(lastname) && TextUtils.isEmpty(identification)) {
             mLastnameView.setError(getString(R.string.error_field_required));
             focusView = mLastnameView;
             cancel = true;
-        } else if (!islastnameValid(lastname)) {
+        } else if (!islastnameValid(lastname) && TextUtils.isEmpty(identification)) {
             mLastnameView.setError(getString(R.string.error_invalid_lastname));
             focusView = mLastnameView;
             cancel = true;
@@ -194,21 +203,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+        } else
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(lastname, birthdate);
             mAuthTask.execute((Void) null);
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            String message = mLastnameView.getText().toString() + mBirthdateView.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
-            startActivity(intent);
 
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        message = mLastnameView.getText().toString() + mBirthdateView.getText().toString() + mPatientIDView.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
 
         }
-    }
+
+
 
     private boolean islastnameValid(String lastname) {
         //TODO: Replace this with your own logic
@@ -218,6 +228,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isbirthdateValid(String birthdate) {
         //TODO: Replace this with your own logic
         return birthdate.length() > 4;
+    }
+
+    private boolean isidentificationValid(String identification) {
+        //TODO: Replace this with your own logic
+        return true;
     }
 
     /**
