@@ -99,6 +99,16 @@
                 android:text="@string/action_access"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/read_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="sendMessage"
+                android:text="@string/action_read"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

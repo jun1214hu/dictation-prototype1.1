@@ -25,6 +25,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button mBtnSave;
     private TextView mIdentifier;
     private TextView mSave;
+    private TextView mSavedAs;
+
     private FloatingActionButton mBack;
 
     private String outputCurrent;
@@ -57,9 +60,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Spinner languageSpinner;
 
     private String language;
-
-    private String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
-    private String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
 
     private File file;
@@ -73,9 +73,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+        String pastTranscript = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE_TWO);
+
         mIdentifier = (TextView) findViewById(R.id.textView2);
         mIdentifier.append(message);
         mSave = (TextView) findViewById(R.id.textView3);
+
+        mSavedAs = (TextView) findViewById(R.id.textView7);
 
         mBack = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         mBack.setOnClickListener(new View.OnClickListener() {
@@ -153,11 +157,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         languageSpinner.setAdapter(adapter);
         languageSpinner.setOnItemSelectedListener(this);
 
-
-
-
-
-
+        mVoiceInputTv.setText(pastTranscript);
 
     }
 
@@ -204,6 +204,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
+        String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
         File extDir = getExternalFilesDir(null);
 //      String path = extDir.getAbsolutePath();
 
@@ -212,12 +215,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         counter++;
 
-        patientFile = message + " " + counter;
-        String FILENAME = patientFile;
+        patientFile = message + "_" + counter;
+        String FILENAME = patientFile + ".json";
 
         file = new File(extDir, FILENAME);
 
         mSave.setText(time);
+        mSavedAs.setText(patientFile);
 
         output = mVoiceInputTv.getText().toString();
 
@@ -239,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         fos.close();
 
         mVoiceInputTv.setText("");
+        mSavedAs.setText(patientFile);
     }
 
     public void onBackPressed() {

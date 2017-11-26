@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.JsonReader;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,8 +33,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -53,15 +67,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
+
+
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
     public static final String EXTRA_MESSAGE = "com.example.jung.speechtotext.MESSAGE";
+    public static final String EXTRA_MESSAGE_TWO = "com.example.jung.speechtotext.MESSAGE_TWO";
+
     // UI references.
     private AutoCompleteTextView mLastnameView;
     private AutoCompleteTextView mPatientIDView;
@@ -69,6 +88,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private String message;
+    private String pastTranscript;
+    private File file;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +119,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
 
-
-
+        Button mReadButton = (Button) findViewById(R.id.read_button);
+        mReadButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    readFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                attemptLogin();
             }
         });
 
@@ -106,59 +141,60 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    /* Checks if external storage is available for read and write */
+
+    private void readFile() throws IOException, JSONException {
+        if (!isExternalStorageWritable() || !isExternalStorageReadable())
+        {
+            mPatientIDView.setText("Error");
+            return;
+        }
+
+        File extDir = getExternalFilesDir(null);
+//      String path = extDir.getAbsolutePath();
+
+        String patientFile = mPatientIDView.getText().toString();
+        String FILENAME = patientFile + ".json";
+
+        file = new File(extDir, FILENAME);
+
+        FileInputStream in = openFileInput(FILENAME);
+
+        InputStreamReader inputStreamReader = new InputStreamReader(in);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        StringBuilder sb = new StringBuilder();
+
+        while ((pastTranscript = bufferedReader.readLine()) != null) {
+            sb.append(pastTranscript);
+        }
+
+        pastTranscript = sb.toString();
+
+        inputStreamReader.close();
 
 
-///*
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
+    }
+
+
+
+
+
+
+//        File extDir = getExternalFilesDir(null);
+//        String filename = "pleaseread_1.json";
+//        file = new File(extDir, filename);
+//        FileInputStream in = openFileInput(filename);
 //
-//        getLoaderManager().initLoader(0, null, this);
-//    }
+//        InputStreamReader inputStreamReader = new InputStreamReader(in);
+//        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//        StringBuilder sb = new StringBuilder();
 //
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
+//        while ((pastTranscript = bufferedReader.readLine()) != null) {
+//            sb.append(pastTranscript);
 //        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * Callback received when a permissions request has been completed.
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
+//        inputStreamReader.close();
+//        pastTranscript = sb.toString();
 //    }
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -182,7 +218,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mBirthdateView.setError(getString(R.string.error_field_required));
             focusView = mBirthdateView;
             cancel = true;
-        } else if (!isbirthdateValid(birthdate) && TextUtils.isEmpty(identification)) {
+        }
+
+        else if (!isbirthdateValid(birthdate) && TextUtils.isEmpty(identification)) {
             mBirthdateView.setError(getString(R.string.error_invalid_birthdate));
             focusView = mBirthdateView;
             cancel = true;
@@ -193,30 +231,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mLastnameView.setError(getString(R.string.error_field_required));
             focusView = mLastnameView;
             cancel = true;
-        } else if (!islastnameValid(lastname) && TextUtils.isEmpty(identification)) {
+        }
+
+        else if (!islastnameValid(lastname) && TextUtils.isEmpty(identification)) {
             mLastnameView.setError(getString(R.string.error_invalid_lastname));
             focusView = mLastnameView;
             cancel = true;
+        }
+
+        if (!TextUtils.isEmpty(identification) && (!TextUtils.isEmpty(lastname) || !TextUtils.isEmpty(birthdate)))
+        {
+            message = mPatientIDView.getText().toString();
+        }
+        else
+        {
+            message = mLastnameView.getText().toString() + mBirthdateView.getText().toString() + mPatientIDView.getText().toString();
         }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else
+        } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(lastname, birthdate);
             mAuthTask.execute((Void) null);
 
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        message = mLastnameView.getText().toString() + mBirthdateView.getText().toString() + mPatientIDView.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, message);
+            intent.putExtra(EXTRA_MESSAGE_TWO, pastTranscript);
+            startActivity(intent);
         }
+    }
 
 
 
@@ -381,6 +429,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
 

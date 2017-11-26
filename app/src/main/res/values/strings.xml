@@ -7,8 +7,10 @@
     <string name="textView2">"Patient: "</string>
     <string name="saveTime" translatable="false"> </string>
     <string name="saveTimePrompt">"Last Saved: "</string>
+    <string name="savedName" translatable="false"> </string>
     <string name="undo">Undo</string>
     <string name="save">Save</string>
+    <string name="savedAs">Saved as: </string>
 
 
     <!-- Strings related to login -->
@@ -16,7 +18,8 @@
     <string name="prompt_lastname">Last Name</string>
     <string name="prompt_birthdate">Birthdate</string>
     <string name="or"> or </string>
-    <string name="action_access">Access</string>
+    <string name="action_access"> Write File </string>
+    <string name="action_read"> Read File</string>
     <string name="error_invalid_lastname">This last name is invalid</string>
     <string name="error_invalid_birthdate">This birthdate is invalid</string>
     <string name="error_field_required">This field is required</string>
@@ -33,7 +36,7 @@
         <item>العربية</item>
     </string-array>
     <string name="textView3"></string>
-    <string name="settings">Settings</string>
+
 
 
 </resources>

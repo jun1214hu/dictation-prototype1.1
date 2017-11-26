@@ -113,11 +113,9 @@
         android:layout_width="550dp"
         android:layout_height="wrap_content"
         android:text="@string/textView2"
-        android:layout_below="@+id/textView3"
-        android:layout_toRightOf="@+id/floatingActionButton"
-        android:layout_toEndOf="@+id/floatingActionButton"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp" />
+        android:layout_below="@+id/mSavedAs"
+        android:layout_alignLeft="@+id/mSavedAs"
+        android:layout_alignStart="@+id/mSavedAs" />
 
     <Button
         android:id="@+id/btnUndo"
@@ -164,9 +162,36 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_alignTop="@+id/textView3"
-        android:text="@string/saveTimePrompt" />
+        android:text="@string/saveTimePrompt"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_toRightOf="@+id/floatingActionButton"
+        android:layout_toEndOf="@+id/floatingActionButton"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp" />
+
+    <TextView
+        android:id="@+id/mSavedAs"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_below="@+id/textView5"
+        android:layout_toStartOf="@+id/textView3"
+        android:text="@string/savedAs"
+        android:layout_toLeftOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/mSavedAs"
+        android:layout_alignBottom="@+id/mSavedAs"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp"
+        android:layout_toRightOf="@+id/btnUndo"
+        android:text="@string/savedName" />
 
 </RelativeLayout>
