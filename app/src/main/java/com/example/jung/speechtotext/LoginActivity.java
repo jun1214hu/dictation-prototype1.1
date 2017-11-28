@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
 
+    static final int GET_FILE_REQUEST = 1;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -90,12 +92,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private String message;
     private String pastTranscript;
     private File file;
+    private Boolean readAlready;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        readAlready = false;
         // Set up the login form.
         mLastnameView = (AutoCompleteTextView) findViewById(R.id.lastname);
         //populateAutoComplete();
@@ -133,7 +138,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                attemptLogin();
             }
         });
 
@@ -143,57 +147,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     private void readFile() throws IOException, JSONException {
-        if (!isExternalStorageWritable() || !isExternalStorageReadable())
-        {
-            mPatientIDView.setText("Error");
+        if (!isExternalStorageWritable() || !isExternalStorageReadable()) {
+            mPatientIDView.setError("Unable to Find File");
             return;
         }
 
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
         File extDir = getExternalFilesDir(null);
-//      String path = extDir.getAbsolutePath();
+        String path = extDir.getAbsolutePath();
 
-        String patientFile = mPatientIDView.getText().toString();
-        String FILENAME = patientFile + ".json";
-
-        file = new File(extDir, FILENAME);
-
-        FileInputStream in = openFileInput(FILENAME);
-
-        InputStreamReader inputStreamReader = new InputStreamReader(in);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        StringBuilder sb = new StringBuilder();
-
-        while ((pastTranscript = bufferedReader.readLine()) != null) {
-            sb.append(pastTranscript);
-        }
-
-        pastTranscript = sb.toString();
-
-        inputStreamReader.close();
-
+        Uri uri = Uri.parse(path);
+        intent.setDataAndType(uri, "text/plain");
+        startActivityForResult(intent, GET_FILE_REQUEST);
 
     }
 
 
+    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+        String transcript;
+        if (requestCode == GET_FILE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Uri content_describer = data.getData();
+                BufferedReader reader = null;
+                try {
+                    InputStream in = getContentResolver().openInputStream(content_describer);
+                    reader = new BufferedReader(new InputStreamReader(in));
 
+                    String line;
+                    StringBuilder builder = new StringBuilder();
+                    while ((line = reader.readLine()) != null)
+                    {
+                        builder.append(line);
+                    }
 
+                    pastTranscript = builder.toString();
+                    message = "this worked!";
 
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-//        File extDir = getExternalFilesDir(null);
-//        String filename = "pleaseread_1.json";
-//        file = new File(extDir, filename);
-//        FileInputStream in = openFileInput(filename);
+//                //get the Transcript portion of JSON
+//                JSONObject jsonObject = jsonData.getJSONObject("1");
+//                String transcript = jsonObject.getString("Transcript");
 //
-//        InputStreamReader inputStreamReader = new InputStreamReader(in);
-//        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//        StringBuilder sb = new StringBuilder();
+//                //get the Patient ID portion of the JSON
+//                String pastID = jsonObject.getString("patient ID");
+
+                //return the past transcript
+//                pastTranscript = transcript;
 //
-//        while ((pastTranscript = bufferedReader.readLine()) != null) {
-//            sb.append(pastTranscript);
-//        }
-//        inputStreamReader.close();
-//        pastTranscript = sb.toString();
-//    }
+//                //return the message
+//                message = pastID;
+//
+//                //give
+                readAlready = true;
+                attemptLogin();
+            }
+        }
+    }
+
+
 
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -214,26 +232,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(birthdate) && TextUtils.isEmpty(identification)) {
+        if (TextUtils.isEmpty(birthdate) && TextUtils.isEmpty(identification)&& !readAlready)  {
             mBirthdateView.setError(getString(R.string.error_field_required));
             focusView = mBirthdateView;
             cancel = true;
         }
 
-        else if (!isbirthdateValid(birthdate) && TextUtils.isEmpty(identification)) {
+        else if (!isbirthdateValid(birthdate) && TextUtils.isEmpty(identification)&& !readAlready) {
             mBirthdateView.setError(getString(R.string.error_invalid_birthdate));
             focusView = mBirthdateView;
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(lastname) && TextUtils.isEmpty(identification)) {
+        if (TextUtils.isEmpty(lastname) && TextUtils.isEmpty(identification)&& !readAlready) {
             mLastnameView.setError(getString(R.string.error_field_required));
             focusView = mLastnameView;
             cancel = true;
         }
 
-        else if (!islastnameValid(lastname) && TextUtils.isEmpty(identification)) {
+        else if (!islastnameValid(lastname) && TextUtils.isEmpty(identification)&& !readAlready) {
             mLastnameView.setError(getString(R.string.error_invalid_lastname));
             focusView = mLastnameView;
             cancel = true;
@@ -241,11 +259,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         if (!TextUtils.isEmpty(identification) && (!TextUtils.isEmpty(lastname) || !TextUtils.isEmpty(birthdate)))
         {
-            message = mPatientIDView.getText().toString();
+            if (!readAlready) {
+                message = mPatientIDView.getText().toString();
+            }
         }
         else
         {
-            message = mLastnameView.getText().toString() + mBirthdateView.getText().toString() + mPatientIDView.getText().toString();
+            if (!readAlready) {
+                message = mLastnameView.getText().toString() + mBirthdateView.getText().toString() + mPatientIDView.getText().toString();
+            }
         }
 
         if (cancel) {
@@ -262,6 +284,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra(EXTRA_MESSAGE, message);
             intent.putExtra(EXTRA_MESSAGE_TWO, pastTranscript);
+
             startActivity(intent);
         }
     }

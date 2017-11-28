@@ -75,6 +75,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
         String pastTranscript = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE_TWO);
 
+//        Intent intent2 = getIntent();
+//        String action = intent2.getAction();
+//        String type = intent2.getType();
+//
+//        if (Intent.ACTION_SEND.equals(action) && type != null)
+//        {
+//            if("text/plain".equals(type))
+//                handleSendText(intent2);
+//        }
+
+
         mIdentifier = (TextView) findViewById(R.id.textView2);
         mIdentifier.append(message);
         mSave = (TextView) findViewById(R.id.textView3);
@@ -161,6 +172,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+//    void handleSendText(Intent intent)
+//    {
+//        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+//        if (sharedText != null)
+//        {
+//            mVoiceInputTv.setText(sharedText);
+//            mIdentifier.setText("asdsfdhgfhjgjh");
+//        }
+//    }
+
     private void clearText(View v) {
         mVoiceInputTv.setText("");
     }
@@ -216,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         counter++;
 
         patientFile = message + "_" + counter;
-        String FILENAME = patientFile + ".json";
+        String FILENAME = patientFile + ".txt";
 
         file = new File(extDir, FILENAME);
 
