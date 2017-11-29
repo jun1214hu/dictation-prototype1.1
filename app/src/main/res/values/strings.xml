@@ -1,9 +1,7 @@
 <resources>
-    <string name="app_name"> NOT WORKING</string>
+    <string name="app_name"> MedText</string>
     <string name="hint"> Tap to Record </string>
     <string name="title_activity_login">MedText</string>
-
-    <string name="hello">Hello World, FileExplore!</string>
 
     <!-- Strings related to mainActivity -->
     <string name="textView2">"Patient: "</string>
