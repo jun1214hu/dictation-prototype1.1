@@ -221,12 +221,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         if (!isExternalStorageWritable() || !isExternalStorageReadable())
         {
-            mSave.setText("Error");
+            mSave.setText("Error External Storage Unuseable");
             return;
         }
 
-        String time = DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date());
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String time = new SimpleDateFormat("kk:mm").format(new Date());
+        String date = new SimpleDateFormat("yy.MM.dd").format(new Date());
+        String shortDate = new SimpleDateFormat("yy-MM").format(new Date());
 
         File extDir = getExternalFilesDir(null);
 //      String path = extDir.getAbsolutePath();
@@ -234,9 +235,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
 
+
         counter++;
 
-        patientFile = message + "_" + counter;
+        patientFile = message + "_" + shortDate + "_" + counter + "_" + time ;
         String FILENAME = patientFile + ".txt";
 
         file = new File(extDir, FILENAME);

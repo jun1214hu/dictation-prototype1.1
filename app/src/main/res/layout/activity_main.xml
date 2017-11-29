@@ -47,6 +47,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mSavedAs"
+            android:layout_alignStart="@+id/mSavedAs"
+            android:layout_below="@+id/mSavedAs"
+            android:text="@string/textView2" />
+
         <ImageButton
             android:id="@+id/btnSpeak"
             style="@android:style/Widget.DeviceDefault.ImageButton"
@@ -108,15 +117,6 @@
         android:layout_toRightOf="@+id/textView5"
         android:layout_toEndOf="@+id/textView5" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="550dp"
-        android:layout_height="wrap_content"
-        android:text="@string/textView2"
-        android:layout_below="@+id/mSavedAs"
-        android:layout_alignLeft="@+id/mSavedAs"
-        android:layout_alignStart="@+id/mSavedAs" />
-
     <Button
         android:id="@+id/btnUndo"
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -137,7 +137,6 @@
         android:id="@+id/languageSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/scrollView3"
         android:background="@android:color/transparent"
         android:elevation="3dp"
         android:entries="@array/language_arrays"
@@ -152,11 +151,9 @@
         android:paddingTop="10dp"
         android:popupBackground="@android:color/background_light"
         android:prompt="@string/language_prompt"
-        android:layout_alignLeft="@+id/btnSave"
-        android:layout_alignStart="@+id/btnSave"
-        android:layout_alignRight="@+id/btnSave"
-        android:layout_alignEnd="@+id/btnSave"
-        android:layout_alignParentTop="true" />
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/textView5"
@@ -166,32 +163,28 @@
         android:layout_alignBaseline="@+id/textView3"
         android:layout_alignBottom="@+id/textView3"
         android:layout_toRightOf="@+id/floatingActionButton"
-        android:layout_toEndOf="@+id/floatingActionButton"
-        android:layout_marginLeft="19dp"
-        android:layout_marginStart="19dp" />
+        android:layout_toEndOf="@+id/floatingActionButton" />
 
     <TextView
         android:id="@+id/mSavedAs"
-        android:layout_width="20dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView5"
-        android:layout_alignStart="@+id/textView5"
+        android:layout_width="55dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/scrollView3"
         android:layout_below="@+id/textView5"
-        android:layout_toStartOf="@+id/textView3"
-        android:text="@string/savedAs"
-        android:layout_toLeftOf="@+id/textView3" />
+        android:layout_toEndOf="@+id/floatingActionButton"
+        android:layout_toRightOf="@+id/floatingActionButton"
+        android:text="@string/savedAs" />
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/mSavedAs"
-        android:layout_alignBottom="@+id/mSavedAs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignEnd="@+id/textView3"
         android:layout_alignRight="@+id/textView3"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp"
-        android:layout_toRightOf="@+id/btnUndo"
-        android:text="@string/savedName" />
+        android:layout_toEndOf="@+id/mSavedAs"
+        android:text="@string/savedName"
+        android:layout_above="@+id/scrollView3"
+        android:layout_below="@+id/textView3"
+        android:layout_toRightOf="@+id/mSavedAs" />
 
 </RelativeLayout>
