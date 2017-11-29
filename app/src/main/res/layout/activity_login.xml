@@ -45,13 +45,12 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/identification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="363dp"
+                    android:layout_height="match_parent"
                     android:completionHint="@string/prompt_identification"
                     android:hint="@string/prompt_identification"
                     android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -66,8 +65,7 @@
                     android:completionHint="@string/prompt_lastname"
                     android:hint="@string/prompt_lastname"
                     android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -84,8 +82,7 @@
                     android:imeActionLabel="@string/action_access"
                     android:imeOptions="actionUnspecified"
                     android:inputType="date"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 

@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private FloatingActionButton mBack;
 
-    private String outputCurrent;
     private String output;
+    private String outputCurrent;
     private String undoOutput;
 
     private Spinner languageSpinner;
@@ -75,23 +75,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
         String pastTranscript = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE_TWO);
 
-//        Intent intent2 = getIntent();
-//        String action = intent2.getAction();
-//        String type = intent2.getType();
-//
-//        if (Intent.ACTION_SEND.equals(action) && type != null)
-//        {
-//            if("text/plain".equals(type))
-//                handleSendText(intent2);
-//        }
-
 
         mIdentifier = (TextView) findViewById(R.id.textView2);
         mIdentifier.append(message);
         mSave = (TextView) findViewById(R.id.textView3);
-
         mSavedAs = (TextView) findViewById(R.id.textView7);
-
         mBack = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,20 +155,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.language_arrays, android.R.layout.simple_spinner_item);
         languageSpinner.setAdapter(adapter);
         languageSpinner.setOnItemSelectedListener(this);
-
         mVoiceInputTv.setText(pastTranscript);
 
     }
-
-//    void handleSendText(Intent intent)
-//    {
-//        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-//        if (sharedText != null)
-//        {
-//            mVoiceInputTv.setText(sharedText);
-//            mIdentifier.setText("asdsfdhgfhjgjh");
-//        }
-//    }
 
     private void clearText(View v) {
         mVoiceInputTv.setText("");
@@ -230,11 +207,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String shortDate = new SimpleDateFormat("yy-MM").format(new Date());
 
         File extDir = getExternalFilesDir(null);
-//      String path = extDir.getAbsolutePath();
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
-
 
         counter++;
 
@@ -300,8 +275,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     mVoiceInputTv.append(" , ");
 
                     outputCurrent = result.get(0);
-//                    completeOutput.add(output);
-
                 }
                 break;
             }

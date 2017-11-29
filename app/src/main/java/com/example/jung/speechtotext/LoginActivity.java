@@ -3,6 +3,7 @@ package com.example.jung.speechtotext;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -52,22 +53,11 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via lastname/password.
+ * A login screen that offers login via patient identifier or birthdate and last name.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    // public static final String EXTRA_MESSAGE = "com.example.jung.speechtotext.MESSAGE";
-    // private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-
+    // Authentication system can be added
 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
@@ -78,8 +68,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
+
     private UserLoginTask mAuthTask = null;
 
+    // messages that will be passed the Main Activity
     public static final String EXTRA_MESSAGE = "com.example.jung.speechtotext.MESSAGE";
     public static final String EXTRA_MESSAGE_TWO = "com.example.jung.speechtotext.MESSAGE_TWO";
 
@@ -101,12 +93,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         readAlready = false;
+
         // Set up the login form.
+
         mLastnameView = (AutoCompleteTextView) findViewById(R.id.lastname);
-        //populateAutoComplete();
-
         mPatientIDView = (AutoCompleteTextView) findViewById(R.id.identification);
-
         mBirthdateView = (EditText) findViewById(R.id.birthdate);
         mBirthdateView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -120,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mLastnameSignInButton = (Button) findViewById(R.id.access_button);
+
         mLastnameSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,18 +173,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         builder.append(line);
                     }
 
-//                    pastTranscript = builder.toString();
-//                    message = "this worked!";
-
                     String jsonString = builder.toString();
 
                     JSONArray newArray = new JSONArray(jsonString);
-
                     JSONObject jsonObj = newArray.getJSONObject(0);
-//
-//                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-//
-//
+
                     String transcript =  jsonObj.getString("Transcript");
                     String pastID = jsonObj.getString("patient ID");
 
@@ -211,20 +196,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
 
-//                //get the Transcript portion of JSON
-//                JSONObject jsonObject = jsonData.getJSONObject("1");
-//                String transcript = jsonObject.getString("Transcript");
-//
-//                //get the Patient ID portion of the JSON
-//                String pastID = jsonObject.getString("patient ID");
-
-                //return the past transcript
-//                pastTranscript = transcript;
-//
-//                //return the message
-//                message = pastID;
-//
-//                //give
                 readAlready = true;
                 attemptLogin();
             }
@@ -313,18 +284,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     private boolean islastnameValid(String lastname) {
-        //TODO: Replace this with your own logic
-        return true;
+        if (lastname.length() != 0) {
+            return true;
+        }
+        else
+            return false;
     }
 
     private boolean isbirthdateValid(String birthdate) {
-        //TODO: Replace this with your own logic
         return birthdate.length() > 4;
     }
 
     private boolean isidentificationValid(String identification) {
-        //TODO: Replace this with your own logic
-        return true;
+        return identification.length() > 2;
     }
 
     /**
@@ -434,7 +406,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // add extra security if needed
 
             try {
                 // Simulate network access.
@@ -451,7 +423,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 
-            // TODO: register the new account here.
             return true;
         }
 
@@ -474,6 +445,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+    // checks if external storage is available to write into
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
