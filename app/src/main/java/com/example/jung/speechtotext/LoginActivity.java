@@ -166,7 +166,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data)
     {
-        String transcript;
         if (requestCode == GET_FILE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Uri content_describer = data.getData();
@@ -182,12 +181,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         builder.append(line);
                     }
 
-                    pastTranscript = builder.toString();
-                    message = "this worked!";
+//                    pastTranscript = builder.toString();
+//                    message = "this worked!";
+
+                    String jsonString = builder.toString();
+
+                    JSONArray newArray = new JSONArray(jsonString);
+
+                    JSONObject jsonObj = newArray.getJSONObject(0);
+//
+//                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+//
+//
+                    String transcript =  jsonObj.getString("Transcript");
+                    String pastID = jsonObj.getString("patient ID");
+
+                    pastTranscript = transcript;
+
+                    //return the message
+                    message = pastID;
+
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -210,6 +230,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
     }
+
 
 
 
